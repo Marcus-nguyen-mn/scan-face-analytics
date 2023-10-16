@@ -377,6 +377,15 @@ function handleInformationClient(){
     
 }
 
+// Base64 to File image
+function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+}
 function handleResultScan(){
     let itemBtnShowResults = document.querySelectorAll(".item-btn-show-results-rsp");
     let itemResultsImgResp = document.querySelectorAll(".item-results-img-resp");
@@ -384,65 +393,44 @@ function handleResultScan(){
     let mcResultLoading = document.querySelector("#mcResultLoading");
     if(mcListScanImageResultsCover){
         let listImgScan = JSON.parse(localStorage.getItem("mcar"));
-        let dataTrais = {
-            "image": listImgScan[0]
+        let mcPrefix = 'data:image/gif;base64,';
+        let gocTraisResults = document.querySelector("#gocTrais");
+        if(gocTraisResults){
+            gocTraisResults.innerHTML = `<img src="${mcPrefix+listImgScan[0]}" alt="Resutls Left" />`
+        } 
+        let gocCenterResults = document.querySelector("#chinhsDien");
+        if(gocCenterResults){
+            gocCenterResults.innerHTML = `<img src="${mcPrefix+listImgScan[1]}" alt="Resutls Center" />`
+        } 
+        let gocRightResults = document.querySelector("#gocPhair");
+        if(gocRightResults){
+            gocRightResults.innerHTML = `<img src="${mcPrefix+listImgScan[2]}" alt="Resutls Right" />`
         }
-        let dataCenter = {
-            "image": listImgScan[1]
-        }
-        let dataPhair = {
-            "image": listImgScan[2]
-        }
-        async function postData(url = "", data = {}) {
-            const response = await fetch(url, {
-            method: "POST",
-            mode: "cors", // no-cors, *cors, same-origin
-            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: "same-origin", // include, *same-origin, omit
-            headers: {
-                "Content-Type": "application/json",
-            },
-            redirect: "follow", // manual, *follow, error
-            referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: JSON.stringify(data), // body data type must match "Content-Type" header
-            });
-            return response.json(); // parses JSON response into native JavaScript objects
-        }
-        let mcPrefix = 'data:image/png;base64,';
-        postData("https://dva-scan.as.r.appspot.com/api/face", dataTrais).then((results) => {
-            if(results){
-                let gocTraisResults = document.querySelector("#gocTrais");
-                let amountMunTrais = document.querySelector("#amountMunTrais");
-                if(gocTraisResults){
-                    gocTraisResults.innerHTML = `<img src="${mcPrefix+results.data.image}" alt="Resutls Left" />`
-                } 
-                
-                if(amountMunTrais){
-                    amountMunTrais.innerHTML = results.data.num;
-                } 
-            }
-        });
-        postData("https://dva-scan.as.r.appspot.com/api/face", dataCenter).then((results) => {
-            if(results){
-                let gocCenterResults = document.querySelector("#chinhsDien");
+        let mcFileImage = dataURLtoFile('data:image/png;base64,'+listImgScan[1],'image.jpg');
+        const form = new FormData(); 
+        form.append('image', mcFileImage); 
+        form.append('max_face_num', '1'); 
+        form.append('face_field', 'color,smooth,acnespotmole');  
+        const settings = { 
+            async: true, 
+            crossDomain: true, 
+            url: 'https://skin-analysis.p.rapidapi.com/face/effect/skin_analyze', 
+            method: 'POST', 
+            headers: { 
+            'X-RapidAPI-Key': '1f4bdfce82msh7d30ccf2632e86cp189b1ejsn0d32bb5eb31a', 
+            'X-RapidAPI-Host': 'skin-analysis.p.rapidapi.com' 
+            }, 
+            processData: false, 
+            contentType: false, 
+            mimeType: 'multipart/form-data', 
+            data: form 
+        };  
+        jQuery.ajax(settings).done(function (response) { 
+            if(response){
+                let mcData = JSON.parse(response)
                 let amountMunCenter = document.querySelector("#amountMunCenter");
-                if(gocCenterResults){
-                    gocCenterResults.innerHTML = `<img src="${mcPrefix+results.data.image}" alt="Resutls Center" />`
-                } 
                 if(amountMunCenter){
-                    amountMunCenter.innerHTML = results.data.num;
-                } 
-            }
-        });
-        postData("https://dva-scan.as.r.appspot.com/api/face", dataPhair).then((results) => {
-            if(results){
-                let gocRightResults = document.querySelector("#gocPhair");
-                let amountMunPhair = document.querySelector("#amountMunPhair");
-                if(gocRightResults){
-                    gocRightResults.innerHTML = `<img src="${mcPrefix+results.data.image}" alt="Resutls Center" />`
-                } 
-                if(amountMunPhair){
-                    amountMunPhair.innerHTML = results.data.num;
+                    amountMunCenter.innerHTML = mcData.result.face_list[0].acnespotmole.acne_num;
                 } 
                 if(mcResultLoading){
                     let progress = 0;
@@ -455,33 +443,26 @@ function handleResultScan(){
                             if (width >= 100) {
                                 clearInterval(id);
                                 progress = 0;
-                              } else {
+                                } else {
                                 width++;
                                 currentNumberLoad.innerHTML = width  + "%";
                                 elem.style.width = width + "%";
-                              }
+                                }
                         }, 10);
-                      }
+                        }
                     setTimeout(() => {
                         mcResultLoading.style.display = "none";
                     }, 3000);
                 }
             }
-        });
+        }); 
     }
-    
     if(itemBtnShowResults){
-        let numCover = document.querySelectorAll(".amount-mu-cover");
         itemBtnShowResults.forEach(element => {
             element.onclick = ()=>{
                 itemBtnShowResults.forEach(item => {
                     item.classList.remove("active");
                 })
-                if(numCover){
-                    numCover.forEach(item => {
-                        item.classList.remove("active");
-                    });
-                }
                 if(itemResultsImgResp){
                     itemResultsImgResp.forEach(item => {
                         item.classList.remove("active");
@@ -489,9 +470,7 @@ function handleResultScan(){
                 }
                 element.classList.add("active");
                 let currentShow = document.querySelector(element.getAttribute('data-id'));
-                let currentShowNum = document.querySelector(element.getAttribute('data-num'));
                 currentShow.classList.add("active");
-                currentShowNum.classList.add("active");
             }
         });
     }
@@ -559,7 +538,6 @@ function handleUploadPage(){
                 fileImgOne.click();
                 fileImgOne.onchange = async function(event){
                     const file = event.target.files[0];
-                    console.log("Show result: ", file);
                     const base64 = await convertBase64(file);
                     const base64String = base64.replace("data:", "").replace(/^.+,/, "");
                     if(showImageUploadOne){
@@ -631,69 +609,3 @@ function handleUploadPage(){
     }
 }
 
-
-// Base64 to File image
-// function dataURLtoFile(dataurl, filename) {
-//     var arr = dataurl.split(','),
-//         mime = arr[0].match(/:(.*?);/)[1],
-//         bstr = atob(arr[arr.length - 1]), 
-//         n = bstr.length, 
-//         u8arr = new Uint8Array(n);
-//     while(n--){
-//         u8arr[n] = bstr.charCodeAt(n);
-//     }
-//     return new File([u8arr], filename, {type:mime});
-// }
-
-// //Usage example:
-// var file = dataURLtoFile('data:text/plain;base64,aGVsbG8=','image.png');
-// console.log(file);
- 
-let url = 'http://localhost:3000/wp-content/themes/magicscan-theme/assets/images/test-face.png'
-const toDataURL = url => fetch(url)
-    .then(response => response.blob())
-    .then(blob => new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result)
-    reader.onerror = reject
-    reader.readAsDataURL(blob)
-}))
-
-function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type:mime});
-}
-
-toDataURL(url)
-.then(dataUrl => {
-    var fileData = dataURLtoFile(dataUrl, "imageName.jpg");
-    console.log("Here is JavaScript File Object",fileData);
-    const form = new FormData(); 
-    form.append('image', fileData); 
-    form.append('max_face_num', '1'); 
-    form.append('face_field', 'color,smooth,acnespotmole');    
-    // const settings = { 
-    //     async: true, 
-    //     crossDomain: true, 
-    //     url: 'https://skin-analysis.p.rapidapi.com/face/effect/skin_analyze', 
-    //     method: 'POST', 
-    //     headers: { 
-    //     'X-RapidAPI-Key': 'ae3514ae71msh60f1af89fc7bf5ep1dcbd8jsnc2d7a27112c1', 
-    //     'X-RapidAPI-Host': 'skin-analysis.p.rapidapi.com' 
-    //     }, 
-    //     processData: false, 
-    //     contentType: false, 
-    //     mimeType: 'multipart/form-data', 
-    //     data: form 
-    // }; 
-    // jQuery.ajax(settings).done(function (response) { 
-    //     console.log(response); 
-    // });
-    // for(var pair of form.entries()) {
-    //     console.log(pair[0]+ ', '+ pair[1]); 
-    // }
-}) 

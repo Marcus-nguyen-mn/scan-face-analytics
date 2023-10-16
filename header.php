@@ -49,7 +49,6 @@
                     <div class="left-btn-bar" id="barMobile">
                         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/burger.png" alt="Bar">
                     </div>
-                    <?php echo get_template_directory_uri(); ?>/assets/images/test-face.png
                     <div class="right-mob-contact">
                         <button type="button">Liên hệ</button>
                     </div>

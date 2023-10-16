@@ -117,7 +117,7 @@ const [leftSide, setLeftSide] = useState(<svg xmlns="http://www.w3.org/2000/svg"
     return (
       <div className="mc-app-scan-build">
             <div className='mc-app-scan-build-head'>
-              <Webcam height={458} width={358} videoConstraints={videoConstraints} ref={webcamRef} style={
+              <Webcam height={458} width={358} videoConstraints={videoConstraints} screenshotFormat="image/jpeg" ref={webcamRef} style={
                 {
                   width: '100%',
                   height: 458,

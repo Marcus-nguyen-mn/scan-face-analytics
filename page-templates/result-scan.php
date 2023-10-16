@@ -90,15 +90,15 @@ get_header();
                 </svg>
             </button>
             <div class="amount-mu">
-                <div class="amount-mu-cover active" id="numMunTrais">
+                <!-- <div class="amount-mu-cover active" id="numMunTrais">
                     <div class="num-amount" id="amountMunTrais">
                         1
                     </div>
                     <div class="text-mu">
                         Mụn
                     </div>
-                </div>
-                <div class="amount-mu-cover" id="numMunCenter">
+                </div> -->
+                <div class="amount-mu-cover active" id="numMunCenter">
                     <div class="num-amount" id="amountMunCenter">
                         2
                     </div>
@@ -106,14 +106,14 @@ get_header();
                         Mụn
                     </div>
                 </div>
-                <div class="amount-mu-cover" id="numMunPhair">
+                <!-- <div class="amount-mu-cover" id="numMunPhair">
                     <div class="num-amount" id="amountMunPhair">
                         3
                     </div>
                     <div class="text-mu">
                         Mụn
                     </div>
-                </div>
+                </div> -->
                 
             </div>
             <div class="ladder-mu">

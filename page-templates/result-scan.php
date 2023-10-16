@@ -122,9 +122,49 @@ get_header();
                 </div>
                 <div class="ladder-do">
                     <img src="<?php echo get_field("ladder_img"); ?>" alt="Ladder">
-                    <div class="quality-arrow">
+                    <div class="quality-arrow quality-arrow-0">
                         <div class="quality">
-                            0-1
+                            0-2
+                        </div>
+                        <div class="arrow-down">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                <path d="M5.5 9L0.303849 -9.78799e-07L10.6962 -7.02746e-08L5.5 9Z" fill="black"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quality-arrow quality-arrow-1">
+                        <div class="quality">
+                            3-5
+                        </div>
+                        <div class="arrow-down">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                <path d="M5.5 9L0.303849 -9.78799e-07L10.6962 -7.02746e-08L5.5 9Z" fill="black"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quality-arrow quality-arrow-2">
+                        <div class="quality">
+                            6-8
+                        </div>
+                        <div class="arrow-down">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                <path d="M5.5 9L0.303849 -9.78799e-07L10.6962 -7.02746e-08L5.5 9Z" fill="black"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quality-arrow quality-arrow-3">
+                        <div class="quality">
+                            9-11
+                        </div>
+                        <div class="arrow-down">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                <path d="M5.5 9L0.303849 -9.78799e-07L10.6962 -7.02746e-08L5.5 9Z" fill="black"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quality-arrow quality-arrow-4">
+                        <div class="quality">
+                            >12
                         </div>
                         <div class="arrow-down">
                             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">

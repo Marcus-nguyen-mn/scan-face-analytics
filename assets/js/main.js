@@ -429,6 +429,26 @@ function handleResultScan(){
             if(response){
                 let mcData = JSON.parse(response)
                 let amountMunCenter = document.querySelector("#amountMunCenter");
+                let qualityAcne0 = document.querySelector(".quality-arrow-0");
+                let qualityAcne1 = document.querySelector(".quality-arrow-1");
+                let qualityAcne2 = document.querySelector(".quality-arrow-2");
+                let qualityAcne3 = document.querySelector(".quality-arrow-3");
+                let qualityAcne4 = document.querySelector(".quality-arrow-4");
+                if(mcData.result.face_list[0].acnespotmole.acne_num >=0 && mcData.result.face_list[0].acnespotmole.acne_num <= 2){
+                    qualityAcne0.classList.add("active");
+                }
+                if(mcData.result.face_list[0].acnespotmole.acne_num >=3 && mcData.result.face_list[0].acnespotmole.acne_num <= 5){
+                    qualityAcne1.classList.add("active");
+                }
+                if(mcData.result.face_list[0].acnespotmole.acne_num >=6 && mcData.result.face_list[0].acnespotmole.acne_num <= 8){
+                    qualityAcne2.classList.add("active");
+                }
+                if(mcData.result.face_list[0].acnespotmole.acne_num >=9 && mcData.result.face_list[0].acnespotmole.acne_num <= 11){
+                    qualityAcne3.classList.add("active");
+                }
+                if(mcData.result.face_list[0].acnespotmole.acne_num >= 12){
+                    qualityAcne4.classList.add("active");
+                }
                 if(amountMunCenter){
                     amountMunCenter.innerHTML = mcData.result.face_list[0].acnespotmole.acne_num;
                 } 

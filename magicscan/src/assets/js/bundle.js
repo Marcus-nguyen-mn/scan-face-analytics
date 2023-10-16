@@ -110,7 +110,7 @@ const [leftSide, setLeftSide] = useState(<svg xmlns="http://www.w3.org/2000/svg"
       mcNoticeDoneCapture.style.display = "block";
     }
     setTimeout(()=>{
-      window.location.replace("http://localhost:3000/information-client");
+      window.location.replace("https://magicscan.vienthammydiva.vn/information-client");
     }, 1000);
   }
 

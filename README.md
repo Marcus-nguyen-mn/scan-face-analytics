@@ -1,0 +1,2 @@
+# magicscan
+# scan-face-analytics
